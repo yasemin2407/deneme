@@ -389,8 +389,19 @@
                 user-select: none;
                 box-shadow: 0 0 15px rgba(0,255,204,0.3);
             }
-            .mobil-btn:active { background: rgba(0, 255, 204, 0.6); }
-            .mobil-btn.aksiyon { width: 80px; border-radius: 15px; font-size: 14px; }
+            .mobil-btn:active { background: rgba(0, 255, 204, 0.6); 
+            }
+
+            .mobil-btn.aksiyon { width: 80px; border-radius: 15px; font-size: 14px; 
+            }
+
+            @media (orientation: landscape) {
+                canvas { max-height: 80vh; 
+                } /* Telefon yan çevrildiğinde canvas ekrana daha iyi sığar */
+
+                #mobil-kontroller { bottom: 5px; 
+                } 
+            }
         }
     </style>
 </head>
@@ -947,10 +958,13 @@ window.addEventListener("keyup", e => tuslar[e.code] = false);
 
 // --- YENİ: MOBİL DOKUNMATİK ÇİZİM (Taslak Çizme) ---
 canvas.addEventListener("touchstart", e => {
-    if (oyunModu !== "DRAWING" || seciliSekiller.length >= 4) return;
-    e.preventDefault(); // Sayfanın kaymasını engelle
+    // EĞER ÇİZİM MODUNDA DEĞİLSEK VEYA ÇİZİM BİTTİYSE, EKRANI KİLİTLEME (KAYDIRMAYA İZİN VER)
+    if (oyunModu !== "DRAWING" || seciliSekiller.length >= 4) {
+        return; 
+    }
     
-    // Küçülen ekrana göre dokunma koordinatlarını gerçek oyun koordinatlarına çevir
+    e.preventDefault(); // Sadece çizim yaparken sayfanın kaymasını engelle
+    
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
@@ -960,7 +974,6 @@ canvas.addEventListener("touchstart", e => {
     const gx = Math.floor(touchX / kareBoyut);
     const gy = Math.floor(touchY / kareBoyut);
     
-    // Bitişiklik kontrolü (Senin mükemmel mantığın)
     if (seciliSekiller.length > 0) {
         const bitisikMi = seciliSekiller.some(s => 
             (Math.abs(s.x - gx) === 1 && s.y === gy) || 
@@ -993,17 +1006,37 @@ btnSag.addEventListener("touchend", dokunmaBitir("KeyD"));
 btnZipla.addEventListener("touchstart", dokunmaBasla("KeyW"));
 btnZipla.addEventListener("touchend", dokunmaBitir("KeyW"));
 
-// AKSİYON Tuşu (Space görevini görür: Bırak, Hedefle)
+// --- GÜNCELLENMİŞ AKSİYON (SPACE) TUŞU ---
 btnAksiyon.addEventListener("touchstart", (e) => {
     e.preventDefault();
-    tuslar["Space"] = true; // Karakter zıplaması için
+    tuslar["Space"] = true; // Karakterin zıplaması için
     
-    // Oyun modu geçişlerini manuel tetikle (Klavye Event'ini taklit et)
-    if (oyunModu === "DRAWING" && seciliSekiller.length > 0) {
-        window.dispatchEvent(new KeyboardEvent('keydown', {'code': 'Space'}));
-    } else if (oyunModu === "SWINGING") {
-        window.dispatchEvent(new KeyboardEvent('keydown', {'code': 'Space'}));
-    }
+    // Tüm mobil tarayıcılarla %100 uyumlu sahte "Space" olayı
+    const spaceEventKeyDown = new KeyboardEvent('keydown', {
+        key: ' ',
+        code: 'Space',
+        keyCode: 32,
+        which: 32,
+        bubbles: true,
+        cancelable: true
+    });
+    window.dispatchEvent(spaceEventKeyDown);
+});
+
+btnAksiyon.addEventListener("touchend", (e) => { 
+    e.preventDefault(); 
+    tuslar["Space"] = false; 
+    
+    // Tuştan elimizi çektiğimizi de sisteme bildirmeliyiz
+    const spaceEventKeyUp = new KeyboardEvent('keyup', {
+        key: ' ',
+        code: 'Space',
+        keyCode: 32,
+        which: 32,
+        bubbles: true,
+        cancelable: true
+    });
+    window.dispatchEvent(spaceEventKeyUp);
 });
 btnAksiyon.addEventListener("touchend", (e) => { e.preventDefault(); tuslar["Space"] = false; });
 
