@@ -127,11 +127,15 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
+            overflow-y: auto; /* YENİ: Menüyü kaydırılabilir yapar */
         }
 
-        .secim-kutusu { display: flex; 
+        .secim-kutusu { 
+            display: flex; 
             gap: 20px; 
             margin-bottom: 30px; 
+            flex-wrap: wrap; /* YENİ: Ekrana sığmayan kutuları otomatik alt satıra atar */
+            justify-content: center;
         }
 
         .secenek {
@@ -199,6 +203,14 @@
             pointer-events: none; 
             box-shadow: 10px 10px 20px rgba(0,0,0,0.5); 
         }
+
+        #baslangicEkrani { justify-content: 
+            flex-start; 
+            padding: 40px 10px; 
+        }
+        .secenek { width: 100px; 
+            height: 100px; 
+        } /* Mobilde kutuları biraz ufaltır */
 
         .talimat-baslik { 
             color: #00ffcc; 
@@ -1003,7 +1015,16 @@ btnSol.addEventListener("touchstart", dokunmaBasla("KeyA"));
 btnSol.addEventListener("touchend", dokunmaBitir("KeyA"));
 btnSag.addEventListener("touchstart", dokunmaBasla("KeyD"));
 btnSag.addEventListener("touchend", dokunmaBitir("KeyD"));
-btnZipla.addEventListener("touchstart", dokunmaBasla("KeyW"));
+btnZipla.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    tuslar["KeyW"] = true;
+    
+    // Karakter modundaysa ve yere değiyorsa ANINDA zıplat
+    if (oyunModu === "CHARACTER_PLAY" && karakter.yer_degme) {
+        karakter.V_y = karakter.ziplama;
+        karakter.yer_degme = false;
+    }
+});
 btnZipla.addEventListener("touchend", dokunmaBitir("KeyW"));
 
 // --- GÜNCELLENMİŞ AKSİYON (SPACE) TUŞU ---
@@ -1038,7 +1059,6 @@ btnAksiyon.addEventListener("touchend", (e) => {
     });
     window.dispatchEvent(spaceEventKeyUp);
 });
-btnAksiyon.addEventListener("touchend", (e) => { e.preventDefault(); tuslar["Space"] = false; });
 
 window.blokTipiSec = (tip, id) => {
     seciliBlokTipi = Object.assign({}, BLOK_TIPLERI[tip], { tip: tip });
