@@ -104,7 +104,8 @@
             transform: translate(-50%, -50%) scale(1); 
         }
 
-        button { background: #00ffcc; 
+        button { 
+            background: #00ffcc; 
             border: none;
             padding: 10px 25px; 
             border-radius: 5px; 
@@ -195,22 +196,14 @@
             position: absolute; 
             bottom: 30px; 
             left: 20px; 
-            background: linear-gradient(135deg, rgba(0, 18, 32, 0.9), rgba(0, 0, 0, 0.8)); /* Şık bir geçiş */
-            border-left: 4px solid #00ffcc; /* Her tarafı çizmek yerine sadece soldan neon vurgu */
+            background: linear-gradient(135deg, rgba(0, 18, 32, 0.9), rgba(0, 0, 0, 0.8)); 
+            border-left: 4px solid #00ffcc; 
             padding: 20px; 
             border-radius: 0 15px 15px 0; 
             font-size: 14px; 
             pointer-events: none; 
             box-shadow: 10px 10px 20px rgba(0,0,0,0.5); 
         }
-
-        #baslangicEkrani { justify-content: 
-            flex-start; 
-            padding: 40px 10px; 
-        }
-        .secenek { width: 100px; 
-            height: 100px; 
-        } /* Mobilde kutuları biraz ufaltır */
 
         .talimat-baslik { 
             color: #00ffcc; 
@@ -359,10 +352,10 @@
         }
 
         /* 8. MOBİL UYUM (RESPONSIVE) VE SANAL TUŞLAR */
-        #mobil-kontroller { display: none; } /* Bilgisayarda gizle */
+/* 8. MOBİL UYUM (RESPONSIVE) VE SANAL TUŞLAR */
+        #mobil-kontroller { display: none; } 
 
         @media (max-width: 1024px) {
-            /* Ekranı mobil cihaza sığdır */
             canvas {
                 max-width: 100vw;
                 max-height: 100vh;
@@ -370,11 +363,13 @@
                 border: none;
             }
             
-            /* Kalabalık panelleri telefonda küçült veya gizle */
-            #talimat-paneli { display: none; } /* Telefonda yer kaplamasın */
+            #talimat-paneli { display: none; } 
             #arayuz { transform: scale(0.8); transform-origin: top left; }
 
-            /* Sanal Tuşların Görünümü */
+            /* Mobilde menüyü yukarı yasla ve kutuları küçült (BİLGİSAYARI ETKİLEMEZ) */
+            #baslangicEkrani { justify-content: flex-start; padding: 40px 10px; }
+            .secenek { width: 100px; height: 100px; } 
+
             #mobil-kontroller {
                 display: flex;
                 justify-content: space-between;
@@ -384,7 +379,7 @@
                 width: 100vw;
                 padding: 0 20px;
                 box-sizing: border-box;
-                pointer-events: none; /* Aradaki boşluklara tıklanabilsin */
+                pointer-events: none; 
                 z-index: 1000;
             }
             .mobil-sol-grup, .mobil-sag-grup {
@@ -401,18 +396,12 @@
                 user-select: none;
                 box-shadow: 0 0 15px rgba(0,255,204,0.3);
             }
-            .mobil-btn:active { background: rgba(0, 255, 204, 0.6); 
-            }
-
-            .mobil-btn.aksiyon { width: 80px; border-radius: 15px; font-size: 14px; 
-            }
+            .mobil-btn:active { background: rgba(0, 255, 204, 0.6); }
+            .mobil-btn.aksiyon { width: 80px; border-radius: 15px; font-size: 14px; }
 
             @media (orientation: landscape) {
-                canvas { max-height: 80vh; 
-                } /* Telefon yan çevrildiğinde canvas ekrana daha iyi sığar */
-
-                #mobil-kontroller { bottom: 5px; 
-                } 
+                canvas { max-height: 80vh; } 
+                #mobil-kontroller { bottom: 5px; } 
             }
         }
     </style>
@@ -449,10 +438,10 @@
 
 <div class="baslik">KARAKTER SEÇİMİ</div>
         <div class="secim-kutusu" id="charSecimleri">
-            <div class="secenek" style="background-image: url('gozluk.png'); background-size: 110px auto; background-position: bottom center; background-repeat: no-repeat;" onclick="secimYap('char', 'gozluk.png', this)"></div>
-            <div class="secenek" style="background-image: url('gozluksuz.png'); background-size: 110px auto; background-position: bottom center; background-repeat: no-repeat;" onclick="secimYap('char', 'gozluksuz.png', this)"></div>
-            <div class="secenek" style="background-image: url('kremali_sapka.png'); background-size: 135px auto; background-position: bottom center; background-repeat: no-repeat;" onclick="secimYap('char', 'kremali_sapka.png', this)"></div>
-            <div class="secenek" style="background-image: url('yesil_sapka.png'); background-size: 135px auto; background-position: bottom center; background-repeat: no-repeat;" onclick="secimYap('char', 'yesil_sapka.png', this)"></div>
+            <div class="secenek" style="background-image: url('gozluk.png'); background-size: contain; background-position: center; background-repeat: no-repeat;" onclick="secimYap('char', 'gozluk.png', this)"></div>
+            <div class="secenek" style="background-image: url('gozluksuz.png'); background-size: contain; background-position: center; background-repeat: no-repeat;" onclick="secimYap('char', 'gozluksuz.png', this)"></div>
+            <div class="secenek" style="background-image: url('kremali_sapka.png'); background-size: contain; background-position: center; background-repeat: no-repeat;" onclick="secimYap('char', 'kremali_sapka.png', this)"></div>
+            <div class="secenek" style="background-image: url('yesil_sapka.png'); background-size: contain; background-position: center; background-repeat: no-repeat;" onclick="secimYap('char', 'yesil_sapka.png', this)"></div>
         </div>
         <button id="oyunaBaslaBtn" onclick="oyunuBaslat()">OYUNA BAŞLA</button>
     </div>
@@ -526,7 +515,7 @@ let oscilation = 0;
 let dengeSuresi = 0;
 const galibiyetYuksekligi = 250; 
 let kazanmaSuresi = 0; 
-let parkurSuresi = 75 * 60
+let parkurSuresi = 90 * 60;
 const genlik = 350;
 let seciliBlokTipi = BLOK_TIPLERI.NORMAL;
 let parcaciklar = [];
